@@ -24,6 +24,11 @@ public class GardenAdapter extends BaseAdapter {
         this.contentList = contentList;
     }
 
+    public void setContent(List<GridItem> contentList){
+        this.contentList = contentList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return (null == contentList || contentList.isEmpty()) ? 0 : contentList.size();

@@ -17,6 +17,7 @@ public class GardenActivity extends Activity {
 
     private static List<GridItem> content;
     private String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private GardenAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +29,23 @@ public class GardenActivity extends Activity {
     }
 
     private void initData() {
-        content = new ArrayList<GridItem>();
+        content = createData();
+    }
+
+    private List<GridItem> createData() {
+        List<GridItem> list = new ArrayList<GridItem>();
         Random random = new Random();
         int len = characters.length();
         for (int i = 0; i < 60; i++) {
-            content.add(ItemFactory.getInstanse().crateItem(this, String.valueOf(characters.charAt(random.nextInt(len)))));
+            list.add(ItemFactory.getInstanse().crateItem(this, String.valueOf(characters.charAt(random.nextInt(len)))));
         }
+        return list;
     }
 
     private void initView() {
         GridView gridView = (GridView) findViewById(R.id.gridview);
 
-        final GardenAdapter adapter = new GardenAdapter(this, content);
+        adapter = new GardenAdapter(this, content);
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -47,9 +53,22 @@ public class GardenActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 GridItem item = (GridItem) adapter.getItem(position);
-                if (item != null) item.action();
+                if (item != null) {
+                    if ("R".equals(item.name)) {
+                        reInitData();
+                    } else {
+                        item.action();
+                    }
+                }
             }
         });
+    }
+
+    private void reInitData() {
+        if (adapter != null) {
+            content = createData();
+            adapter.setContent(content);
+        }
     }
 
 }

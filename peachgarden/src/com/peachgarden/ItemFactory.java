@@ -12,13 +12,17 @@ public class ItemFactory {
     public GridItem crateItem(Context context, String name) {
         if ("P".equals(name)) {
             return new CapturePhotoItem(context, name);
+        } else if ("C".equals(name)) {
+            return new ClockItem(context, name);
+        } else if ("Q".equals(name)) {
+            return new QuitItem(context, name);
         }
 
-        return new CommonItem(name);
+        return new CommonItem(context, name);
     }
 
     public static ItemFactory getInstanse() {
-        if(instanse == null){
+        if (instanse == null) {
             instanse = new ItemFactory();
         }
         return instanse;
